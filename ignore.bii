@@ -1,2 +1,9 @@
 gtest/*
+Makefile.am
+Makefile.in
+configure
+aclocal.m4
+configure.ac
+make/*
 msvc/*
+scripts/*
