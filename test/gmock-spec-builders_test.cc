@@ -41,9 +41,9 @@
 
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
-#include "gtest/gtest-spi.h"
-#include "gtest/internal/gtest-port.h"
+#include "google/gtest/gtest.h"
+#include "google/gtest/include/gtest/gtest-spi.h"
+#include "google/gtest/include/gtest/internal/gtest-port.h"
 
 namespace testing {
 namespace internal {

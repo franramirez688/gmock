@@ -39,7 +39,7 @@
 #include <sstream>
 #include <string>
 #include "gmock/gmock.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 namespace testing {
 namespace gmock_generated_actions_test {

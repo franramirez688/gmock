@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <string>
 
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 using testing::_;
 using testing::AnyNumber;

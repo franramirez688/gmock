@@ -39,8 +39,8 @@
 #include <sstream>
 #include <string>
 #include "gmock/gmock.h"
-#include "gtest/gtest.h"
-#include "gtest/internal/gtest-linked_ptr.h"
+#include "google/gtest/gtest.h"
+#include "google/gtest/include/gtest/internal/gtest-linked_ptr.h"
 
 namespace testing {
 namespace gmock_more_actions_test {

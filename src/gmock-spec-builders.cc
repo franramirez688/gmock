@@ -42,7 +42,7 @@
 #include <set>
 #include <string>
 #include "gmock/gmock.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 #if GTEST_OS_CYGWIN || GTEST_OS_LINUX || GTEST_OS_MAC
 # include <unistd.h>  // NOLINT

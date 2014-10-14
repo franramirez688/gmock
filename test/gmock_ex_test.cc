@@ -32,7 +32,7 @@
 // Tests Google Mock's functionality that depends on exceptions.
 
 #include "gmock/gmock.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 namespace {
 

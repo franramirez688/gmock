@@ -50,7 +50,7 @@
 
 #include "gmock/internal/gmock-internal-utils.h"
 #include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 #if GTEST_LANG_CXX11
 #include <initializer_list>  // NOLINT -- must be after gtest.h

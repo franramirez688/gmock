@@ -42,7 +42,7 @@
 #include <string>
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 namespace testing {
 namespace internal {

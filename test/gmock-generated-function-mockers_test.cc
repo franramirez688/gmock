@@ -45,7 +45,7 @@
 #include <map>
 #include <string>
 #include "gmock/gmock.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 // There is a bug in MSVC (fixed in VS 2008) that prevents creating a
 // mock for a function with const arguments, so we don't test such

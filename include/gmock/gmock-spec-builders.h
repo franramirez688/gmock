@@ -75,7 +75,7 @@
 #include "gmock/gmock-matchers.h"
 #include "gmock/internal/gmock-internal-utils.h"
 #include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 namespace testing {
 

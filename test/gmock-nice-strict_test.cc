@@ -33,8 +33,8 @@
 
 #include <string>
 #include "gmock/gmock.h"
-#include "gtest/gtest.h"
-#include "gtest/gtest-spi.h"
+#include "google/gtest/gtest.h"
+#include "google/gtest/include/gtest/gtest-spi.h"
 
 // This must not be defined inside the ::testing namespace, or it will
 // clash with ::testing::Mock.

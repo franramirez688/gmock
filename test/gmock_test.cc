@@ -36,7 +36,7 @@
 #include "gmock/gmock.h"
 
 #include <string>
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 using testing::GMOCK_FLAG(verbose);
 using testing::InitGoogleMock;

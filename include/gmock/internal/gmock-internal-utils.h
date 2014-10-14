@@ -44,7 +44,7 @@
 
 #include "gmock/internal/gmock-generated-internal-utils.h"
 #include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
+#include "google/gtest/gtest.h"
 
 namespace testing {
 namespace internal {

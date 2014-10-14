@@ -41,8 +41,8 @@
 #include <vector>
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
-#include "gtest/gtest-spi.h"
+#include "google/gtest/gtest.h"
+#include "google/gtest/include/gtest/gtest-spi.h"
 
 #if GTEST_OS_CYGWIN
 # include <sys/types.h>  // For ssize_t. NOLINT
