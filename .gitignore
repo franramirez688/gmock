@@ -3,3 +3,7 @@ autom4te.cache/*
 config.log
 config.status
 libtool
+gtest/Makefile
+gtest/config.log
+gtest/config.status
+gtest/libtool
