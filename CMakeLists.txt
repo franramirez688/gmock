@@ -130,6 +130,8 @@ ELSE(BIICODE)
       cxx_test(gmock_stress_test gmock)
     endif()
 
+	
+	
     # gmock_all_test is commented to save time building and running tests.
     # Uncomment if necessary.
     # cxx_test(gmock_all_test gmock_main)
@@ -180,4 +182,7 @@ ELSE(BIICODE)
   endif()
 ENDIF(BIICODE)
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+ if (NOT CMAKE_USE_PTHREADS_INIT)
+ set_target_properties(google_gmock_test_gmock_stress_test PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
+endif()
+ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
