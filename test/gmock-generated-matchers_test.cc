@@ -42,8 +42,13 @@
 #include <vector>
 
 #include "gmock/gmock.h"
-#include "google/gtest/gtest.h"
-#include "google/gtest/include/gtest/gtest-spi.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+	#include "google/gtest/include/gtest/gtest-spi.h"
+#else
+	#include "gtest/gtest.h"
+	#include "gtest/gtest-spi.h"
+#endif
 
 namespace {
 

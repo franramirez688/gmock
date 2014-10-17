@@ -36,7 +36,12 @@
 #include "gmock/gmock.h"
 
 #include <string>
-#include "google/gtest/gtest.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+	#include "google/gtest/include/gtest/internal/gtest-port.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 
 using testing::GMOCK_FLAG(verbose);
 using testing::InitGoogleMock;

@@ -37,7 +37,11 @@
 #include <stdio.h>
 #include <string>
 
-#include "google/gtest/gtest.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 
 using testing::_;
 using testing::AnyNumber;

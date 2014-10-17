@@ -39,8 +39,13 @@
 #include <sstream>
 #include <string>
 #include "gmock/gmock.h"
-#include "google/gtest/gtest.h"
-#include "google/gtest/include/gtest/internal/gtest-linked_ptr.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+	#include "google/gtest/include/gtest/internal/gtest-linked_ptr.h"
+#else
+	#include "gtest/gtest.h"
+	#include "gtest/internal/gtest-linked_ptr.h"
+#endif
 
 namespace testing {
 namespace gmock_more_actions_test {

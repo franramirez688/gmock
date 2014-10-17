@@ -39,7 +39,11 @@
 #include <sstream>
 #include <string>
 #include "gmock/gmock.h"
-#include "google/gtest/gtest.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 
 namespace testing {
 namespace gmock_generated_actions_test {

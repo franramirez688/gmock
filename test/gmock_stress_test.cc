@@ -33,9 +33,12 @@
 // threads concurrently.
 
 #include "gmock/gmock.h"
-#include "google/gtest/gtest.h"
-#include "google/gtest/include/gtest/internal/gtest-port.h"
-
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+	#include "google/gtest/include/gtest/internal/gtest-port.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 
 namespace testing {
 namespace {

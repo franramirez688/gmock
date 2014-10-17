@@ -121,7 +121,11 @@
 #endif
 
 #include "gmock/internal/gmock-port.h"
-#include "google/gtest/gtest.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 #include <iostream>
 #include <vector>
 

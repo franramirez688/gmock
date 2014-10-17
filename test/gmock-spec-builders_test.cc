@@ -41,9 +41,15 @@
 
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
-#include "google/gtest/gtest.h"
-#include "google/gtest/include/gtest/gtest-spi.h"
-#include "google/gtest/include/gtest/internal/gtest-port.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+	#include "google/gtest/include/gtest/gtest-spi.h"
+	#include "google/gtest/include/gtest/internal/gtest-port.h"
+#else
+	#include "gtest/gtest.h"
+	#include "gtest/gtest-spi.h"
+	#include "gtest/internal/gtest-port.h"
+#endif
 
 namespace testing {
 namespace internal {

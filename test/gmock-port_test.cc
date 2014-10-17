@@ -34,7 +34,11 @@
 // This file tests the internal cross-platform support utilities.
 
 #include "gmock/internal/gmock-port.h"
-#include "google/gtest/gtest.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 
 // NOTE: if this file is left without tests for some reason, put a dummy
 // test here to make references to symbols in the gtest library and avoid

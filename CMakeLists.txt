@@ -6,6 +6,7 @@ IF(BIICODE)
   ADD_BIICODE_TARGETS()
   #TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC include)
   INCLUDE_DIRECTORIES(include)
+  ADD_DEFINITIONS(-DBIICODE)
 ELSE(BIICODE)
   ########################################################################
   # CMake build script for Google Mock.

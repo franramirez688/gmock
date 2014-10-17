@@ -35,7 +35,11 @@
 
 #include "gmock/internal/gmock-generated-internal-utils.h"
 #include "gmock/internal/gmock-internal-utils.h"
-#include "google/gtest/gtest.h"
+#ifdef BIICODE
+	#include "google/gtest/gtest.h"
+#else
+	#include "gtest/gtest.h"
+#endif
 
 namespace {
 
