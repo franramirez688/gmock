@@ -1,3 +1,2 @@
-include/* - fused-src/* test/*
-src/* - fused-src/* test/*
-test/* - fused-src/*
+include/* - test/*
+src/* - test/*
