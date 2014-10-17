@@ -1,9 +1,14 @@
 gtest/*
 Makefile.am
 Makefile.in
+Makefile
+autom4te.cache/*
 configure
 aclocal.m4
 configure.ac
 make/*
 msvc/*
 scripts/*
+fused-src/*
+config.status
+libtool
