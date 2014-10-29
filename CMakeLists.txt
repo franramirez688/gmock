@@ -1,41 +1,48 @@
+########################################################################
+# CMake build script for Google Mock.
+#
+# To run the tests for Google Mock itself on Linux, use 'make test' or
+# ctest.  You can select which tests to run using 'ctest -R regex'.
+# For more options, run 'ctest --help'.
+
+# BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
+# make it prominent in the GUI.
+option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
+
+option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
+
+# A directory to find Google Test sources.
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/gtest/CMakeLists.txt")
+  set(gtest_dir gtest)
+else()
+  set(gtest_dir ../gtest)
+endif()
+
+# Defines pre_project_set_up_hermetic_build() and set_up_hermetic_build().
+include("${gtest_dir}/cmake/hermetic_build.cmake" OPTIONAL)
+
+if (COMMAND pre_project_set_up_hermetic_build)
+  # Google Test also calls hermetic setup functions from add_subdirectory,
+  # although its changes will not affect things at the current scope.
+  pre_project_set_up_hermetic_build()
+endif()
+
 IF(BIICODE)
   include(${CMAKE_HOME_DIRECTORY}/biicode.cmake)
   # Initializes block variables
   INIT_BIICODE_BLOCK()
+  if (COMMAND set_up_hermetic_build)
+    set_up_hermetic_build()
+  endif()
   # Actually create targets: EXEcutables and libraries.
   ADD_BIICODE_TARGETS()
   #TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC include)
   INCLUDE_DIRECTORIES(include)
   ADD_DEFINITIONS(-DBIICODE)
+
+
 ELSE(BIICODE)
-  ########################################################################
-  # CMake build script for Google Mock.
-  #
-  # To run the tests for Google Mock itself on Linux, use 'make test' or
-  # ctest.  You can select which tests to run using 'ctest -R regex'.
-  # For more options, run 'ctest --help'.
 
-  # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
-  # make it prominent in the GUI.
-  option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
-
-  option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
-
-  # A directory to find Google Test sources.
-  if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/gtest/CMakeLists.txt")
-    set(gtest_dir gtest)
-  else()
-    set(gtest_dir ../gtest)
-  endif()
-
-  # Defines pre_project_set_up_hermetic_build() and set_up_hermetic_build().
-  include("${gtest_dir}/cmake/hermetic_build.cmake" OPTIONAL)
-
-  if (COMMAND pre_project_set_up_hermetic_build)
-    # Google Test also calls hermetic setup functions from add_subdirectory,
-    # although its changes will not affect things at the current scope.
-    pre_project_set_up_hermetic_build()
-  endif()
 
   ########################################################################
   #
