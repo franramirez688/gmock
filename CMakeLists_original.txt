@@ -1,15 +1,3 @@
-###########################################################################
-#
-#
-#     GMock Library CMakeLists.txt adapted to biicode app
-#     If you want check the original CMakeLists.txt, see CMakeLists.txt
-#
-###########################################################################
-include(${CMAKE_HOME_DIRECTORY}/biicode.cmake)
-# Initializes block variables
-INIT_BIICODE_BLOCK()
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 ########################################################################
 # CMake build script for Google Mock.
 #
@@ -21,7 +9,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
-option(gmock_build_tests "Build all of Google Mock's own tests." ON)
+option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
 
 # A directory to find Google Test sources.
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/gtest/CMakeLists.txt")
@@ -39,13 +27,18 @@ if (COMMAND pre_project_set_up_hermetic_build)
   pre_project_set_up_hermetic_build()
 endif()
 
+########################################################################
+#
+# Project-wide settings
 
-# Actually create targets: EXEcutables and libraries.
-ADD_BIICODE_TARGETS()
-#TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC include)
-INCLUDE_DIRECTORIES(include)
-ADD_DEFINITIONS(-DBIICODE)
-
+# Name of the project.
+#
+# CMake files in this project can refer to the root source directory
+# as ${gmock_SOURCE_DIR} and to the root binary directory as
+# ${gmock_BINARY_DIR}.
+# Language "C" is required for find_package(Threads).
+project(gmock CXX C)
+cmake_minimum_required(VERSION 2.6.2)
 
 if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()
@@ -115,13 +108,64 @@ if (gmock_build_tests)
   cxx_test(gmock-generated-function-mockers_test gmock_main)
   cxx_test(gmock-generated-internal-utils_test gmock_main)
   cxx_test(gmock-generated-matchers_test gmock_main)
+  cxx_test(gmock-internal-utils_test gmock_main)
+  cxx_test(gmock-matchers_test gmock_main)
+  cxx_test(gmock-more-actions_test gmock_main)
+  cxx_test(gmock-nice-strict_test gmock_main)
+  cxx_test(gmock-port_test gmock_main)
+  cxx_test(gmock-spec-builders_test gmock_main)
+  cxx_test(gmock_link_test gmock_main test/gmock_link2_test.cc)
+  cxx_test(gmock_test gmock_main)
 
   if (CMAKE_USE_PTHREADS_INIT)
     cxx_test(gmock_stress_test gmock)
   endif()
-endif()
 
-MESSAGE("CMAKE_USE_PTHREADS_INIT ${CMAKE_USE_PTHREADS_INIT}")
-if (NOT CMAKE_USE_PTHREADS_INIT)
-  set_target_properties(google_gmock_test_gmock_stress_test PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
+  # gmock_all_test is commented to save time building and running tests.
+  # Uncomment if necessary.
+  # cxx_test(gmock_all_test gmock_main)
+
+  ############################################################
+  # C++ tests built with non-standard compiler flags.
+
+  cxx_library(gmock_main_no_exception "${cxx_no_exception}"
+    "${gtest_dir}/src/gtest-all.cc" src/gmock-all.cc src/gmock_main.cc)
+
+  cxx_library(gmock_main_no_rtti "${cxx_no_rtti}"
+    "${gtest_dir}/src/gtest-all.cc" src/gmock-all.cc src/gmock_main.cc)
+
+  cxx_library(gmock_main_use_own_tuple "${cxx_use_own_tuple}"
+    "${gtest_dir}/src/gtest-all.cc" src/gmock-all.cc src/gmock_main.cc)
+
+  cxx_test_with_flags(gmock-more-actions_no_exception_test "${cxx_no_exception}"
+    gmock_main_no_exception test/gmock-more-actions_test.cc)
+
+  cxx_test_with_flags(gmock_no_rtti_test "${cxx_no_rtti}"
+    gmock_main_no_rtti test/gmock-spec-builders_test.cc)
+
+  cxx_test_with_flags(gmock_use_own_tuple_test "${cxx_use_own_tuple}"
+    gmock_main_use_own_tuple test/gmock-spec-builders_test.cc)
+
+  cxx_shared_library(shared_gmock_main "${cxx_default}"
+    "${gtest_dir}/src/gtest-all.cc" src/gmock-all.cc src/gmock_main.cc)
+
+  # Tests that a binary can be built with Google Mock as a shared library.  On
+  # some system configurations, it may not possible to run the binary without
+  # knowing more details about the system configurations. We do not try to run
+  # this binary. To get a more robust shared library coverage, configure with
+  # -DBUILD_SHARED_LIBS=ON.
+  cxx_executable_with_flags(shared_gmock_test_ "${cxx_default}"
+    shared_gmock_main test/gmock-spec-builders_test.cc)
+  set_target_properties(shared_gmock_test_
+    PROPERTIES
+    COMPILE_DEFINITIONS "GTEST_LINKED_AS_SHARED_LIBRARY=1")
+
+  ############################################################
+  # Python tests.
+
+  cxx_executable(gmock_leak_test_ test gmock_main)
+  py_test(gmock_leak_test)
+
+  cxx_executable(gmock_output_test_ test gmock)
+  py_test(gmock_output_test)
 endif()
