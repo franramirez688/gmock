@@ -1,3 +1,12 @@
+
+This is an adaptation of the [original library](https://code.google.com/p/googlemock/) to enable its use with Biicode.
+
+[Github repository link](https://github.com/franramirez688/gmock)
+
+[Biicode repository link](https://www.biicode.com/google/gmock)
+
+[![Build Status](https://travis-ci.org/franramirez688/gmock.svg?branch=master)](https://travis-ci.org/franramirez688/gmock)
+
 Google C++ Mocking Framework
 ============================
 
