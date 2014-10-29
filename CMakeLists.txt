@@ -9,7 +9,7 @@ include(${CMAKE_HOME_DIRECTORY}/biicode.cmake)
 # Initializes block variables
 INIT_BIICODE_BLOCK()
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
+SET(gmock_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 ########################################################################
 # CMake build script for Google Mock.
 #
