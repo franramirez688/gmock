@@ -21,7 +21,7 @@ script:
 - cd biicode_project
 - bii find -um
 - bii cpp:build
-- ./bin/gmock-cardinalities_test && ls ./bin/google_gmock_test_gmock_output_test_
+- ./bin/gmock-cardinalities_test && ls ./bin/gmock-generated-matchers_test
 after_success:
 - bii user google -p $BII_GOOGLE_PASSWORD
 - bii publish
