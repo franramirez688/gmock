@@ -8,6 +8,9 @@
 include(${CMAKE_HOME_DIRECTORY}/biicode.cmake)
 # Initializes block variables
 INIT_BIICODE_BLOCK()
+# Actually create targets: EXEcutables and libraries.
+ADD_BIICODE_TARGETS()
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 ########################################################################
@@ -41,9 +44,6 @@ if (COMMAND pre_project_set_up_hermetic_build)
   pre_project_set_up_hermetic_build()
 endif()
 
-
-# Actually create targets: EXEcutables and libraries.
-ADD_BIICODE_TARGETS()
 #TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC include)
 INCLUDE_DIRECTORIES(include)
 ADD_DEFINITIONS(-DBIICODE)
