@@ -20,6 +20,7 @@ script:
 - mv !(biicode_project) ./biicode_project/blocks/google/gmock
 - cd biicode_project
 - bii find -um
+- grep -rl 'own tests.\" OFF' ./ | xargs sed -i 's/own tests.\" OFF/own tests.\" ON/g'
 - bii cpp:build
 - ./bin/gmock-cardinalities_test && ls ./bin/gmock-generated-matchers_test
 after_success:
