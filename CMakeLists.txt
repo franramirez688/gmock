@@ -30,7 +30,7 @@ ENDIF()
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
-option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
+option(gmock_build_tests "Build all of Google Mock's own tests." ON)
 
 # A directory to find Google Test sources.
 if (EXISTS "${CMAKE_HOME_DIRECTORY}/../deps/google/gtest/CMakeLists.txt")
