@@ -11,8 +11,14 @@ INIT_BIICODE_BLOCK()
 # Actually create targets: EXEcutables and libraries.
 ADD_BIICODE_TARGETS()
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+IF(BII_LIB_TARGET)
+  TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ELSE()
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ENDIF()
+
 ########################################################################
 # CMake build script for Google Mock.
 #
@@ -24,7 +30,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
-option(gmock_build_tests "Build all of Google Mock's own tests." ON)
+option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
 
 # A directory to find Google Test sources.
 if (EXISTS "${CMAKE_HOME_DIRECTORY}/../deps/google/gtest/CMakeLists.txt")
@@ -59,6 +65,8 @@ endif()
 config_compiler_and_linker()  # from ${gtest_dir}/cmake/internal_utils.cmake
 
 
+if (gmock_build_tests)
+
 ########################################################################
 #
 # Defines the gmock & gmock_main libraries.  User tests should link
@@ -89,7 +97,7 @@ cxx_library(gmock_main
 # gmock_build_tests option to ON.  You can do it by running ccmake
 # or specifying the -Dgmock_build_tests=ON flag when running cmake.
 
-if (gmock_build_tests)
+
   # This must be set in the root directory for the tests to be run by
   # 'make test' or ctest.
   enable_testing()
@@ -112,6 +120,8 @@ if (gmock_build_tests)
 endif()
 
 MESSAGE("CMAKE_USE_PTHREADS_INIT ${CMAKE_USE_PTHREADS_INIT}")
-if (NOT CMAKE_USE_PTHREADS_INIT)
-  set_target_properties(google_gmock_test_gmock_stress_test PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
-endif()
+IF (NOT CMAKE_USE_PTHREADS_INIT)
+  IF(TARGET google_gmock_test_gmock_stress_test)
+    set_target_properties(google_gmock_test_gmock_stress_test PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
+  ENDIF()
+ENDIF()
