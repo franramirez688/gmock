@@ -33,8 +33,8 @@ option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
 
 # A directory to find Google Test sources.
-if (EXISTS "${CMAKE_HOME_DIRECTORY}/../deps/google/gtest/CMakeLists.txt")
-  set(gtest_dir "${CMAKE_HOME_DIRECTORY}/../deps/google/gtest")
+if (EXISTS "${BII_PROJECT_ROOT}/${BII_DEPS_DIR}/google/gtest/CMakeLists.txt")
+  set(gtest_dir "${BII_PROJECT_ROOT}/${BII_DEPS_DIR}/google/gtest")
   INCLUDE_DIRECTORIES(${gtest_dir}/include)
   INCLUDE_DIRECTORIES(${gtest_dir})
 else()
