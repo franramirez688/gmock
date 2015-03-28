@@ -19,13 +19,4 @@ script:
 - mkdir -p ./biicode_project/blocks/google/gmock
 - mv !(biicode_project) ./biicode_project/blocks/google/gmock
 - cd biicode_project
-- bii find -um
-- grep -rl 'own tests.\" OFF' ./ | xargs sed -i 's/own tests.\" OFF/own tests.\" ON/g'
-- bii cpp:build
-- ./bin/gmock-cardinalities_test && ls ./bin/gmock-generated-matchers_test
-after_success:
-- bii user google -p $BII_GOOGLE_PASSWORD
-- bii publish
-env:
-  global:
-    secure: bUuEvc/LFYshPpwI3ssE6zl2NAcuJPzc0YoQN/vB6lWoHJY35I+5GDzUVTDBDFUGkk2zklvMvx7PZjAWyyyVjsuLi0bLbQ3FAdTEWaFVbJjTT4H4Dpofr+EEN5Obu+63B28m43dXdioJUwsze1Ap19AyEfcVqn82fvh73LOKrkM=
+- bii build --target biitest

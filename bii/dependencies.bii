@@ -1,3 +1,0 @@
-include/* - test/*
-src/* - test/*
-CMakeLists.txt + make/* scripts/* configure configure.ac additional_deps.h build-aux/* src/gmock-all.cc

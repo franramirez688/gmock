@@ -1,3 +1,17 @@
+Google C++ Mocking Framework
+============================
+
+
+Build status
+-------------
+
+- Travis: [![Build Status](https://travis-ci.org/franramirez688/gmock.svg?branch=master)](https://travis-ci.org/franramirez688/gmock)
+
+- biicode: [![Build Status](https://webapi.biicode.com/v1/badges/google/google/gmock/master)](https://www.biicode.com/google/gmock) 
+
+
+Info
+------
 
 This is an adaptation of the [original library](https://code.google.com/p/googlemock/) to enable its use with Biicode.
 
@@ -5,10 +19,6 @@ This is an adaptation of the [original library](https://code.google.com/p/google
 
 [Biicode repository link](https://www.biicode.com/google/gmock)
 
-[![Build Status](https://travis-ci.org/franramirez688/gmock.svg?branch=master)](https://travis-ci.org/franramirez688/gmock)
-
-Google C++ Mocking Framework
-============================
 
 http://code.google.com/p/googlemock/
 
