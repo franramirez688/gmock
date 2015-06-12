@@ -106,6 +106,22 @@ endif()
   ############################################################
   # C++ tests built with standard compiler flags.
 
+if (BIICODE)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/biicode_utils.cmake)
+
+  # gmock_output_test_ deliberately fails, and is meant for testing the failure output of gmock
+  bii_cxx_test(gmock-actions_test gmock_main)
+  bii_cxx_test(gmock-cardinalities_test gmock_main)
+  bii_cxx_test(gmock_ex_test gmock_main)
+  bii_cxx_test(gmock-generated-actions_test gmock_main)
+  bii_cxx_test(gmock-generated-function-mockers_test gmock_main)
+  bii_cxx_test(gmock-generated-internal-utils_test gmock_main)
+  bii_cxx_test(gmock-generated-matchers_test gmock_main)
+
+  if (CMAKE_USE_PTHREADS_INIT)
+    bii_cxx_test(gmock_stress_test gmock)
+  endif()
+else()
   cxx_test(gmock-actions_test gmock_main)
   cxx_test(gmock-cardinalities_test gmock_main)
   cxx_test(gmock_ex_test gmock_main)
@@ -114,10 +130,11 @@ endif()
   cxx_test(gmock-generated-internal-utils_test gmock_main)
   cxx_test(gmock-generated-matchers_test gmock_main)
 
-
   if (CMAKE_USE_PTHREADS_INIT)
     cxx_test(gmock_stress_test gmock)
   endif()
+endif()
+
 endif()
 
 MESSAGE("CMAKE_USE_PTHREADS_INIT ${CMAKE_USE_PTHREADS_INIT}")
