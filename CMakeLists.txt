@@ -5,16 +5,6 @@
 #     If you want check the original CMakeLists.txt, see CMakeLists.txt
 #
 ###########################################################################
-# Actually create targets: EXEcutables and libraries.
-ADD_BII_TARGETS()
-
-IF(BII_BLOCK_TARGET)
-  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-ELSE()
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
-ENDIF()
 
 ########################################################################
 # CMake build script for Google Mock.
@@ -60,6 +50,40 @@ endif()
 # call it again here.
 config_compiler_and_linker()  # from ${gtest_dir}/cmake/internal_utils.cmake
 
+########################################################################
+
+# To allow GMock to be built as a shared library with MSVC, we have to
+# compile it together with GTest sources, so we extract the sources and add
+# it to BII_LIB_SRC
+list(REMOVE_ITEM BII_LIB_DEPS google_gtest)
+get_property(gtest_sources TARGET google_gtest PROPERTY SOURCES)
+
+# We can't just append the relative path gtest source files to BII_LIB_SRC
+# and include_directories(${gtest_dir}), as the add_library()...) cmake
+# function (used by biicode) expects all files specified in BII_LIB_SRC to
+# be relative to the current source directory
+set(gtest_sources_abs )
+foreach(src ${gtest_sources})
+  list(APPEND gtest_sources_abs "${gtest_dir}/${src}")
+endforeach()
+
+set(BII_LIB_SRC ${BII_LIB_SRC} ${gtest_sources_abs})
+
+# Actually create targets: EXEcutables and libraries.
+ADD_BII_TARGETS()
+
+if(BUILD_SHARED_LIBS)
+  target_compile_definitions(${BII_LIB_TARGET} PRIVATE "-DGTEST_CREATE_SHARED_LIBRARY=1"
+                                               INTERFACE "-DGTEST_LINKED_AS_SHARED_LIBRARY=1")
+endif()
+
+IF(BII_BLOCK_TARGET)
+  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ELSE()
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ENDIF()
 
 if (gmock_build_tests)
 
