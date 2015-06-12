@@ -6,7 +6,7 @@
 #
 ###########################################################################
 # Actually create targets: EXEcutables and libraries.
-ADD_BIICODE_TARGETS()
+ADD_BII_TARGETS()
 
 IF(BII_BLOCK_TARGET)
   TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -81,6 +81,11 @@ cxx_library(gmock_main
             "${gtest_dir}/src/gtest-all.cc"
             src/gmock-all.cc
             src/gmock_main.cc)
+
+if (BIICODE)
+  TARGET_INCLUDE_DIRECTORIES(gmock PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+  TARGET_INCLUDE_DIRECTORIES(gmock_main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
 
 ########################################################################
 #
