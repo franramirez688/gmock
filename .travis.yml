@@ -19,4 +19,6 @@ script:
 - mkdir -p ./biicode_project/blocks/google/gmock
 - mv !(biicode_project) ./biicode_project/blocks/google/gmock
 - cd biicode_project
-- bii build --target biitest
+- bii configure -Dgmock_build_tests=ON
+- bii build
+- bii build --target test
