@@ -69,6 +69,17 @@ endforeach()
 
 set(BII_LIB_SRC ${BII_LIB_SRC} ${gtest_sources_abs})
 
+if (MSVC)
+  # Disable C4251 warnings as STL templates are not exported as part of
+  # the GMock library when building a shared library
+  #
+  # WARNING: This is only here because there is enough confidence that
+  # all template members in GMock's exported interfaces are from the STL.
+  foreach(src ${BII_LIB_SRC})
+    set_source_files_properties(${src} PROPERTIES COMPILE_FLAGS "/wd4251")
+  endforeach()
+endif()
+
 # Actually create targets: EXEcutables and libraries.
 ADD_BII_TARGETS()
 
