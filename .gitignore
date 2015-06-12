@@ -7,3 +7,7 @@ gtest/Makefile
 gtest/config.log
 gtest/config.status
 gtest/libtool
+
+# biicode simple layout
+/bii
+/bin
