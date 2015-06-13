@@ -112,6 +112,10 @@ class FooInterface {
 #endif  // GTEST_OS_WINDOWS
 };
 
+#ifdef GMOCK_ALLOWS_CONST_PARAM_FUNCTIONS
+  #pragma warning(push)
+  #pragma warning(disable:4373)
+#endif
 class MockFoo : public FooInterface {
  public:
   MockFoo() {}
@@ -167,6 +171,9 @@ class MockFoo : public FooInterface {
  private:
   GTEST_DISALLOW_COPY_AND_ASSIGN_(MockFoo);
 };
+#ifdef GMOCK_ALLOWS_CONST_PARAM_FUNCTIONS
+  #pragma warning(pop)
+#endif
 
 class FunctionMockerTest : public testing::Test {
  protected:

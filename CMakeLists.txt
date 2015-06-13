@@ -5,16 +5,6 @@
 #     If you want check the original CMakeLists.txt, see CMakeLists.txt
 #
 ###########################################################################
-# Actually create targets: EXEcutables and libraries.
-ADD_BIICODE_TARGETS()
-
-IF(BII_BLOCK_TARGET)
-  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-ELSE()
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
-ENDIF()
 
 ########################################################################
 # CMake build script for Google Mock.
@@ -60,6 +50,51 @@ endif()
 # call it again here.
 config_compiler_and_linker()  # from ${gtest_dir}/cmake/internal_utils.cmake
 
+########################################################################
+
+# To allow GMock to be built as a shared library with MSVC, we have to
+# compile it together with GTest sources, so we extract the sources and add
+# it to BII_LIB_SRC
+list(REMOVE_ITEM BII_LIB_DEPS google_gtest)
+get_property(gtest_sources TARGET google_gtest PROPERTY SOURCES)
+
+# We can't just append the relative path gtest source files to BII_LIB_SRC
+# and include_directories(${gtest_dir}), as the add_library()...) cmake
+# function (used by biicode) expects all files specified in BII_LIB_SRC to
+# be relative to the current source directory
+set(gtest_sources_abs )
+foreach(src ${gtest_sources})
+  list(APPEND gtest_sources_abs "${gtest_dir}/${src}")
+endforeach()
+
+set(BII_LIB_SRC ${BII_LIB_SRC} ${gtest_sources_abs})
+
+if (MSVC)
+  # Disable C4251 warnings as STL templates are not exported as part of
+  # the GMock library when building a shared library
+  #
+  # WARNING: This is only here because there is enough confidence that
+  # all template members in GMock's exported interfaces are from the STL.
+  foreach(src ${BII_LIB_SRC})
+    set_source_files_properties(${src} PROPERTIES COMPILE_FLAGS "/wd4251")
+  endforeach()
+endif()
+
+# Actually create targets: EXEcutables and libraries.
+ADD_BII_TARGETS()
+
+if(BUILD_SHARED_LIBS)
+  target_compile_definitions(${BII_LIB_TARGET} PRIVATE "-DGTEST_CREATE_SHARED_LIBRARY=1"
+                                               INTERFACE "-DGTEST_LINKED_AS_SHARED_LIBRARY=1")
+endif()
+
+IF(BII_BLOCK_TARGET)
+  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+  TARGET_INCLUDE_DIRECTORIES(${BII_BLOCK_TARGET} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ELSE()
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ENDIF()
 
 if (gmock_build_tests)
 
@@ -82,6 +117,11 @@ cxx_library(gmock_main
             src/gmock-all.cc
             src/gmock_main.cc)
 
+if (BIICODE)
+  TARGET_INCLUDE_DIRECTORIES(gmock PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+  TARGET_INCLUDE_DIRECTORIES(gmock_main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 ########################################################################
 #
 # Google Mock's own tests.
@@ -101,6 +141,22 @@ cxx_library(gmock_main
   ############################################################
   # C++ tests built with standard compiler flags.
 
+if (BIICODE)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/biicode_utils.cmake)
+
+  # gmock_output_test_ deliberately fails, and is meant for testing the failure output of gmock
+  bii_cxx_test(gmock-actions_test gmock_main)
+  bii_cxx_test(gmock-cardinalities_test gmock_main)
+  bii_cxx_test(gmock_ex_test gmock_main)
+  bii_cxx_test(gmock-generated-actions_test gmock_main)
+  bii_cxx_test(gmock-generated-function-mockers_test gmock_main)
+  bii_cxx_test(gmock-generated-internal-utils_test gmock_main)
+  bii_cxx_test(gmock-generated-matchers_test gmock_main)
+
+  if (CMAKE_USE_PTHREADS_INIT)
+    bii_cxx_test(gmock_stress_test gmock)
+  endif()
+else()
   cxx_test(gmock-actions_test gmock_main)
   cxx_test(gmock-cardinalities_test gmock_main)
   cxx_test(gmock_ex_test gmock_main)
@@ -109,10 +165,11 @@ cxx_library(gmock_main
   cxx_test(gmock-generated-internal-utils_test gmock_main)
   cxx_test(gmock-generated-matchers_test gmock_main)
 
-
   if (CMAKE_USE_PTHREADS_INIT)
     cxx_test(gmock_stress_test gmock)
   endif()
+endif()
+
 endif()
 
 MESSAGE("CMAKE_USE_PTHREADS_INIT ${CMAKE_USE_PTHREADS_INIT}")
