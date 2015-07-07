@@ -55,21 +55,25 @@ config_compiler_and_linker()  # from ${gtest_dir}/cmake/internal_utils.cmake
 # To allow GMock to be built as a shared library with MSVC, we have to
 # compile it together with GTest sources, so we extract the sources and add
 # it to BII_LIB_SRC
-list(REMOVE_ITEM BII_LIB_DEPS google_gtest)
-get_property(gtest_sources TARGET google_gtest PROPERTY SOURCES)
-
-# We can't just append the relative path gtest source files to BII_LIB_SRC
-# and include_directories(${gtest_dir}), as the add_library()...) cmake
-# function (used by biicode) expects all files specified in BII_LIB_SRC to
-# be relative to the current source directory
-set(gtest_sources_abs )
-foreach(src ${gtest_sources})
-  list(APPEND gtest_sources_abs "${gtest_dir}/${src}")
-endforeach()
-
-set(BII_LIB_SRC ${BII_LIB_SRC} ${gtest_sources_abs})
-
+#
+# If we are building with clang, we must NOT set gtest sources as part of gmock
+# otherwise on Debian systems, tests that link against both gtest and gmock
+# will encounter a 'double free or corruption' error
 if (MSVC)
+  list(REMOVE_ITEM BII_LIB_DEPS google_gtest)
+  get_property(gtest_sources TARGET google_gtest PROPERTY SOURCES)
+
+  # We can't just append the relative path gtest source files to BII_LIB_SRC
+  # and include_directories(${gtest_dir}), as the add_library()...) cmake
+  # function (used by biicode) expects all files specified in BII_LIB_SRC to
+  # be relative to the current source directory
+  set(gtest_sources_abs )
+  foreach(src ${gtest_sources})
+    list(APPEND gtest_sources_abs "${gtest_dir}/${src}")
+  endforeach()
+
+  set(BII_LIB_SRC ${BII_LIB_SRC} ${gtest_sources_abs})
+
   # Disable C4251 warnings as STL templates are not exported as part of
   # the GMock library when building a shared library
   #
